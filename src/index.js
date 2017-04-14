@@ -169,7 +169,7 @@ GoogleMapsLoader.load((google) => {
   const directionsService = new maps.DirectionsService();
   const directionsDisplay = new maps.DirectionsRenderer();
 
-  const calculateControlDiv = createElement('div')
+  const calculateControlDiv = createElement('div');
   const calculateControl = new CalculateControl(calculateControlDiv, map, maps, directionsService, directionsDisplay);
   calculateControlDiv.index = 1;
   map.controls[maps.ControlPosition.TOP_CENTER].push(calculateControlDiv);

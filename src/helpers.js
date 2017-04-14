@@ -7,19 +7,16 @@ const setPropsToObj = (obj, props) => {
   });
 };
 
-const createElement = (type, params, parentToAppend) => {
+const createElement = (type, params = {}, parentToAppend) => {
   const elem = document.createElement(type);
 
-  if (params) {
-    Object.keys(params).forEach((key) => {
-      if (typeof elem[key] === 'object') {
-        setPropsToObj(elem[key], params[key]);
-      } else {
-        elem[key] = params[key];
-      }
-    });
-  }
-
+  Object.keys(params).forEach((key) => {
+    if (typeof elem[key] === 'object') {
+      setPropsToObj(elem[key], params[key]);
+    } else {
+      elem[key] = params[key];
+    }
+  });
 
   if (parentToAppend) {
     parentToAppend.appendChild(elem);
