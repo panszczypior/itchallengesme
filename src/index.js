@@ -38,7 +38,8 @@ const calculateDistance = function calculateDistance() {
 
   const latLngFirst = new LatLng(markerFirstPos.lat(), markerFirstPos.lng());
   const latLngSecond = new LatLng(markerSecondPos.lat(), markerSecondPos.lng());
-  elems.straightLineRoute.innerHTML = geometry.spherical.computeDistanceBetween(latLngFirst, latLngSecond);
+  elems.straightLineRoute.innerHTML = geometry.spherical
+                                        .computeDistanceBetween(latLngFirst, latLngSecond);
 
   const points = [
     latLngFirst,
@@ -48,20 +49,24 @@ const calculateDistance = function calculateDistance() {
   return points;
 };
 
-const calculateAndDisplayRoute = function calculateAndDisplayRoute(map, directionsService, directionsDisplay, points) {
+const calculateAndDisplayRoute = function calculateAndDisplayRoute(
+                                  map,
+                                  directionsService,
+                                  directionsDisplay,
+                                  points) {
   directionsDisplay.setMap(map);
   directionsService.route({
     origin: points[0],
     destination: points[1],
-    travelMode: 'DRIVING'
-  }, function(response, status) {
+    travelMode: 'DRIVING',
+  }, (response, status) => {
     if (status === 'OK') {
       elems.travelRoute.innerHTML = response.routes[0].legs[0].distance.value;
       directionsDisplay.setDirections(response);
       lines.push(directionsDisplay);
-  } else {
-    console.log(`Directions request failed due to ${status}`);
-  }
+    } else {
+      console.log(`Directions request failed due to ${status}`);
+    }
   });
 };
 
@@ -111,7 +116,6 @@ const addMarker = function addMarker(map, geocoder, directionsDisplay, event) {
     position: latLng,
     map,
     draggable: true,
-    icon: 'src/it-challenges-icon.png',
   });
 
   const temporaryMarker = Object.assign(marker, { id: setUniqueId() });
