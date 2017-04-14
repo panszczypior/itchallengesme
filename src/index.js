@@ -11,6 +11,9 @@ import {
   convertMetersToKilometers,
   setUniqueId,
 } from './helpers';
+import {
+  createTooltip,
+} from './creators';
 
 const elems = {
   map: document.getElementById('map'),
@@ -35,7 +38,6 @@ const init = (google) => {
   const directionsService = new maps.DirectionsService();
   const directionsDisplay = new maps.DirectionsRenderer({ preserveViewport: true });
   const calculateControlDiv = createElement('div', { index: 1 });
-  const resultDiv = createElement('div', { index: 1 });
 
   const calculateAndDisplayRoute = (points) => {
     const waypoints = points.map((item, index, array) => {
@@ -56,10 +58,8 @@ const init = (google) => {
         travelMode: travelModes.driving,
       }, (response, status) => {
         if (status === 'OK') {
-          const distance = response.routes[0].legs.reduce((acc, val) => {
-            return acc + val.distance.value;
-          }, 0);
-
+          const distance = response.routes[0].legs
+            .reduce((acc, val) => acc + val.distance.value, 0);
           elems.travelRoute.innerHTML = convertMetersToKilometers(distance);
           directionsDisplay.setDirections(response);
           lines.push(directionsDisplay);
@@ -89,9 +89,9 @@ const init = (google) => {
       geometry,
     } = maps;
 
-    const points = markers.filter(item => item.selected).map((item) => {
-      return new LatLng(item.position.lat(), item.position.lng());
-    });
+    const points = markers
+      .filter(item => item.selected)
+      .map(item => (new LatLng(item.position.lat(), item.position.lng())));
 
     if (points.length > 1) {
       const roundedResult = Math.round(geometry.spherical
@@ -101,6 +101,12 @@ const init = (google) => {
     }
 
     return points;
+  };
+
+  const removeAllLines = () => {
+    lines.forEach(item => item.setMap(null));
+    lines.length = 0;
+    directionsDisplay.setDirections({ routes: [] });
   };
 
   const distanceHandler = () => {
@@ -186,61 +192,6 @@ const init = (google) => {
     );
   };
 
-  const resultControl = () => {
-    const resultUI = createElement(
-      'div',
-      {
-        className: 'result-ui',
-      },
-      resultDiv,
-    );
-
-    const firstHeader = createElement(
-      'span',
-      {
-        className: 'result-text',
-        innerHTML: 'distance straight line: ',
-      },
-      resultUI,
-    );
-
-    const secondHeader = createElement(
-      'span',
-      {
-        className: 'result-text',
-        innerHTML: 'distance travel mode: ',
-      },
-      resultUI,
-    );
-
-    const firstResult = createElement(
-      'span',
-      {
-        innerHTML: '0',
-      },
-      firstHeader,
-    );
-
-    const secondResult = createElement(
-      'span',
-      {
-        innerHTML: '0',
-      },
-      secondHeader,
-    );
-
-    Object.assign(elems, {
-      straightLineRoute: firstResult,
-      travelRoute: secondResult,
-    });
-  };
-
-  const removeAllLines = () => {
-    lines.forEach(item => item.setMap(null));
-    lines.length = 0;
-    directionsDisplay.setDirections({ routes: [] });
-  };
-
   const getInfoWindow = (content) => {
     const { InfoWindow } = maps;
 
@@ -262,23 +213,12 @@ const init = (google) => {
     });
   };
 
-  const createTooltip = address => {
-    const tempArr = address.split(',');
-    return `<div id="content">
-        <div id="siteNotice">
-        ${tempArr[0]}
-        <br/>
-        ${tempArr[1]}
-        </div>
-      </div>`;
-  };
-
   const markerSelectedHandler = (position, marker) => {
-    marker.selected = !marker.selected;
+    marker.selected = !marker.selected; // eslint-disable-line no-param-reassign
     if (marker.selected) {
       getAddress(position).then((data) => {
         const contentString = createTooltip(data);
-        marker.infoWindow = getInfoWindow(contentString);
+        marker.infoWindow = getInfoWindow(contentString); // eslint-disable-line no-param-reassign
         marker.infoWindow.open(map, marker);
       });
     } else {
@@ -322,9 +262,7 @@ const init = (google) => {
   };
 
   calculateControl();
-  // resultControl();
   map.controls[maps.ControlPosition.TOP_CENTER].push(calculateControlDiv);
-  // map.controls[maps.ControlPosition.TOP_RIGHT].push(resultDiv);
 
   map.addListener('click', addMarker);
 };
