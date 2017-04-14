@@ -20,16 +20,21 @@ const dashedLine = {
   repeat: '20px',
 };
 
-const consts = {
-  API_KEY,
-  initMapSettings,
-  dashedLine,
+const travelModes = {
+  driving: 'DRIVING',
 };
 
+const consts = {
+  API_KEY,
+  dashedLine,
+  initMapSettings,
+  travelModes,
+};
 
 export {
   consts as default,
   API_KEY,
-  initMapSettings,
   dashedLine,
+  initMapSettings,
+  travelModes,
 };

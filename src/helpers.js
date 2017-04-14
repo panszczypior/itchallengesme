@@ -25,15 +25,25 @@ const createElement = (type, params = {}, parentToAppend) => {
   return elem;
 };
 
+const convertMetersToKilometers = (data) => {
+  if (data < 1000) {
+    return `${data} m`;
+  }
+
+  return `${(data / 1000).toFixed(1)} km`;
+};
+
 const helpers = {
-  setUniqueId,
-  setPropsToObj,
+  convertMetersToKilometers,
   createElement,
+  setPropsToObj,
+  setUniqueId,
 };
 
 export {
   helpers as default,
-  setUniqueId,
-  setPropsToObj,
+  convertMetersToKilometers,
   createElement,
+  setPropsToObj,
+  setUniqueId,
 };

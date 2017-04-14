@@ -7,8 +7,6 @@
     "test": "babel-node spec/run.js",
     "test-watch": "babel-watch spec/run.js"
   },
-  "repository": "https://github.com/ucanthurtme/itchallengesme.git",
-  "author": "Przemek <lprzemek@gmail.com>",
   "license": "MIT",
   "devDependencies": {
     "babel-cli": "^6.24.1",
