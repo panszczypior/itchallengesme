@@ -10,13 +10,16 @@ const setPropsToObj = (obj, props) => {
 const createElement = (type, params, parentToAppend) => {
   const elem = document.createElement(type);
 
-  Object.keys(params).forEach((key) => {
-    if (typeof elem[key] === 'object') {
-      setPropsToObj(elem[key], params[key]);
-    } else {
-      elem[key] = params[key];
-    }
-  });
+  if (params) {
+    Object.keys(params).forEach((key) => {
+      if (typeof elem[key] === 'object') {
+        setPropsToObj(elem[key], params[key]);
+      } else {
+        elem[key] = params[key];
+      }
+    });
+  }
+
 
   if (parentToAppend) {
     parentToAppend.appendChild(elem);

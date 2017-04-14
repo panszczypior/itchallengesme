@@ -1,5 +1,5 @@
 import { API_KEY, initMapSettings, dashedLine } from './consts';
-import { setUniqueId } from './helpers';
+import { setUniqueId, createElement } from './helpers';
 
 const GoogleMapsLoader = require('google-maps');
 
@@ -138,15 +138,24 @@ const addMarker = function addMarker(map, geocoder, directionsDisplay, event) {
 };
 
 function CalculateControl(controlDiv, map, maps, directionsService, directionsDisplay) {
-  const controlUI = document.createElement('div');
-  controlUI.className = 'control-ui';
-  controlUI.title = 'Click to calculate distance';
-  controlDiv.appendChild(controlUI);
 
-  const controlText = document.createElement('div');
-  controlText.className = 'control-text';
-  controlText.innerHTML = 'Calculate distance';
-  controlUI.appendChild(controlText);
+  const controlUI = createElement(
+    'div',
+    {
+      className: 'control-ui',
+      title: 'Click to calculate distance',
+    },
+    controlDiv,
+  );
+
+  const controlText = createElement(
+    'div',
+    {
+      className: 'control-text',
+      innerHTML: 'Calculate distance',
+    },
+    controlUI,
+  );
 
   controlUI.addEventListener('click', distanceHandler.bind(maps, map, directionsService, directionsDisplay));
 }
@@ -160,7 +169,7 @@ GoogleMapsLoader.load((google) => {
   const directionsService = new maps.DirectionsService();
   const directionsDisplay = new maps.DirectionsRenderer();
 
-  const calculateControlDiv = document.createElement('div');
+  const calculateControlDiv = createElement('div')
   const calculateControl = new CalculateControl(calculateControlDiv, map, maps, directionsService, directionsDisplay);
   calculateControlDiv.index = 1;
   map.controls[maps.ControlPosition.TOP_CENTER].push(calculateControlDiv);
